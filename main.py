@@ -8,7 +8,7 @@ import praw
 import pandas as pd
 import datetime as dt
 
-
+print("It opened main")
 #Slackbot INIT
 slack_client = SlackClient(os.environ.get("SLACK_BOT_TOKEN"))
 bot_id = None
