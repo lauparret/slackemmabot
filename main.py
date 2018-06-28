@@ -128,7 +128,7 @@ if __name__ == "__main__":
         print("Emma is connected and running!")
         # Read Emma's user ID and workspace
         assign_workspace()
-        send_message(get_id('general'), "Emma is connected and running!")
+        send_message(get_id('testchannel'), "Emma is connected and running!")
         
         while True:
             #print("I'm working")
