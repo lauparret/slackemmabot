@@ -6,7 +6,6 @@ import praw
 import pandas as pd
 import datetime as dt
 
-print("It opened main")
 #Slackbot INIT
 slack_client = SlackClient(os.environ.get("SLACK_BOT_TOKEN"))
 bot_id = None
@@ -16,7 +15,7 @@ channels = {}
 #Constants
 READ_DELAY = 2 # Delay between reading from RTM
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)" #No idea why this works, but it does
-POST_LIMIT = 100 #Maximum posts scraped from reddit, has to be smaller than 1000
+POST_LIMIT = 500 #Maximum posts scraped from reddit, has to be smaller than 1000
 
 
     ############################################ MESSAGING ####################################################
@@ -62,7 +61,7 @@ def handle_message(event):
             send_message(channel,"I didn't quite catch that, try 'help'")
 
     elif 'emma' in message or 'Emma' in message:
-        print("emma detected")
+        #print("emma detected")
         url = get_url()
         send_message(channel,url)
 
@@ -129,12 +128,13 @@ if __name__ == "__main__":
         print("Emma is connected and running!")
         # Read Emma's user ID and workspace
         assign_workspace()
-
+        send_message(get_id('general'), "Emma is connected and running!")
+        
         while True:
-            print("I'm working")
+            #print("I'm working")
             #input("Press key to continue")
             event = slack_client.rtm_read()
-            print(event)
+            #print(event)
             if len(event) != 0:
                 for elem in event:
                     event_type = elem.get('type')
