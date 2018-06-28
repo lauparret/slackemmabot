@@ -133,7 +133,7 @@ if __name__ == "__main__":
         assign_workspace()
 
         while True:
-
+            print("I'm working")
             #input("Press key to continue")
             event = slack_client.rtm_read()
             print(event)
