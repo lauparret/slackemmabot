@@ -2,8 +2,6 @@ import os
 import time
 import re
 from slackclient import SlackClient
-from messaging import *
-from data_proc import *
 import praw
 import pandas as pd
 import datetime as dt
