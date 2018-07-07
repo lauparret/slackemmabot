@@ -159,7 +159,7 @@ if __name__ == "__main__":
         # Read Emma's user ID and workspace
         assign_workspace()
         send_message(get_id('testchannel'), "Emma is connected and running!")
-        schedule.every().day.at("23:45").do(bonjour)
+        schedule.every().day.at("23:51").do(bonjour)
 
         while True:
             # print("I'm working")
