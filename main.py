@@ -57,6 +57,10 @@ def handle_message(event):
         elif command in responses:
             response = responses[command]
             send_message(channel,response)
+           
+        elif command.startswith("send nudes"):
+            send_message(channel,"https://78.media.tumblr.com/a671be346722c876dd44925912bc51d6/tumblr_inline_osgqtm7Yxx1rifr4k_250.gif")
+            send_message(channel,"Excuse me?")
         else:
             send_message(channel,"I didn't quite catch that, try 'help'")
 
