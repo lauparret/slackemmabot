@@ -63,6 +63,11 @@ def handle_message(event):
             send_message(channel,
                          "https://78.media.tumblr.com/a671be346722c876dd44925912bc51d6/tumblr_inline_osgqtm7Yxx1rifr4k_250.gif")
             send_message(channel, "Excuse me?")
+
+        elif command.startswith("mokke"):
+            mokke = get_url(gentleman_url_set)
+            send_message(channel, mokke)
+
         else:
             send_message(channel, "I didn't quite catch that, try 'help'")
 
@@ -159,7 +164,7 @@ if __name__ == "__main__":
         # Read Emma's user ID and workspace
         assign_workspace()
         send_message(get_id('testchannel'), "Emma is connected and running!")
-        schedule.every().day.at("23:54").do(bonjour)
+        schedule.every().day.at("08:00").do(bonjour)
 
         while True:
             # print("I'm working")
