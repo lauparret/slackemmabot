@@ -8,6 +8,7 @@ prawcore==0.14.0
 python-dateutil==2.7.3
 pytz==2018.4
 requests==2.18.4
+schedule==0.5.0
 simplejson==3.15.0
 six==1.11.0
 slackclient==1.2.1
