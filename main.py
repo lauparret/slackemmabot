@@ -145,9 +145,9 @@ def get_id(argument):
 
 def bonjour():
     url = get_url(gentleman_url_set)
-    send_message(get_id('testchannel'), url)
+    send_message(get_id('random'), url)
     time.sleep(1)
-    send_message(get_id('testchannel'), "Bonjour!")
+    send_message(get_id('random'), "Bonjour!")
 
 
 
