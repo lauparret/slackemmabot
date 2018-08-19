@@ -20,7 +20,7 @@ MENTION_REGEX = "^<@(|[WU].+?)>(.*)"  # No idea why this works, but it does
 
 ############################################ MESSAGING ####################################################
 commands = {'Wat eten we?', 'Wij hebben honger'}
-responses = {"help": "//TODO",
+responses = {"help": "I listen to: 'please', 'Hello there', 'mokke', 'go wild' and some other stuff",
              "please": "Fine, here is a cute gif: https://giphy.com/gifs/emma-watson-XwpE5Bv0xcG5O",
              "Hello": "Hi, cutie! https://giphy.com/gifs/emma-watson-nMKyRK3dIFZa8",
              "Hello there": "General Kenobi!",
@@ -30,11 +30,30 @@ responses = {"help": "//TODO",
 
 food = {"Frieten", "Domino's", "Donki's"}
 
+class message:
+    def __init__(self,channel=None, content=None):
+        self.set_content(content)
+        self.set_channel(channel)
 
-def send_message(channel, content):
-    slack_client.rtm_send_message(channel, content)
+    def send(self):
+        if self.content != None and self.channel_id != None:
+             slack_client.rtm_send_message(self.channel_id,self.content)
+        else:
+             print('Message not sent, no content or id specified')
 
+    def set_content(self,content):
+        self.content = content
+    def set_channel(self,channel):
+        id = get_id(channel)
+        if id != None:
+            self.channel_id = id
+        else:
+            self.channel_id = channel
 
+    def clear(self):
+        self.content, self.channel_id = None, None
+
+############# Mention handling ##############
 def parse_direct_mention(message):
     """
         Finds a direct mention (a mention that is at the beginning) in message text
@@ -44,37 +63,43 @@ def parse_direct_mention(message):
     return (matches.group(1), matches.group(2).strip()) if matches else (None, None)
 
 
-def handle_message(event):
-    message = event.get('text')
+def handle_message_event(event):
+    content = event.get('text')
     channel = event.get('channel')
-    parse = parse_direct_mention(message)
+    parse = parse_direct_mention(content)
     direct_bot = (parse[0] == bot_id)
+    reply = message(channel)
 
     if direct_bot == True:
         command = parse[1]
         if command.startswith("stop"):
-            send_message(channel, 'Ok, bye!')
+            reply.set_content('Ok, bye!')
+            reply.send()
             exit()
         elif command in responses:
-            response = responses[command]
-            send_message(channel, response)
+            reply.set_content(responses[command])
 
         elif command.startswith("send nudes"):
-            send_message(channel,
-                         "https://78.media.tumblr.com/a671be346722c876dd44925912bc51d6/tumblr_inline_osgqtm7Yxx1rifr4k_250.gif")
-            send_message(channel, "Excuse me?")
+            message(channel,
+                 "https://78.media.tumblr.com/a671be346722c876dd44925912bc51d6/tumblr_inline_osgqtm7Yxx1rifr4k_250.gif").send()
+            reply.set_content("Excuse me?")
 
         elif command.startswith("mokke"):
-            mokke = gentleman.get_url()
-            send_message(channel, mokke)
+            reply.set_content(gentleman.get_url())
+        elif command.startswith("go wild") or command.startswith("let's go on safari"):
+            reply.set_content(gonewild.get_url())
 
         else:
-            send_message(channel, "I didn't quite catch that, try 'help'")
+            reply.set_content("I didn't quite catch that, try 'help'")
 
-    elif 'emma' in message or 'Emma' in message:
-        # print("emma detected")
-        url = emma.get_url()
-        send_message(channel, url)
+    elif 'emma' in content or 'Emma' in content:
+        #print("emma detected")
+        reply.set_content(emma.get_url())
+
+
+    if reply.content!= None:
+        reply.send()
+
 
 
 ####################################REDDIT SCRAPER ########################################
@@ -157,17 +182,12 @@ def get_id(argument):
 
 def bonjour():
     url = gentleman.get_url()
-    send_message(get_id('random'), url)
+    message('testchannel', url).send()
     time.sleep(1)
-    send_message(get_id('random'), "Bonjour!")
+    message('testchannel', "Bonjour!").send()
 
 
-
-
-
-
-
-        ########################## MAIN LOOP ###################################
+########################## MAIN LOOP ###################################
 
 
 if __name__ == "__main__":
@@ -175,7 +195,8 @@ if __name__ == "__main__":
         print("Emma is connected and running!")
         # Read Emma's user ID and workspace
         assign_workspace()
-        send_message(get_id('testchannel'), "Emma is connected and running!")
+
+        message('testchannel', "Version 2.0 is connected and running!").send()
         schedule.every().day.at("08:00").do(bonjour)
 
         while True:
@@ -189,7 +210,7 @@ if __name__ == "__main__":
                     event_type = elem.get('type')
                     if event_type == 'message' and not event_type == None and \
                             not "subtype" in elem and not "message" in elem and "text" in elem:
-                        handle_message(elem)
+                        handle_message_event(elem)
 
             time.sleep(READ_DELAY)
 
@@ -198,5 +219,5 @@ if __name__ == "__main__":
 
 
 
-        ####heroku run -a emmabot123456789 python main.py
-        ####heroku ps:scale worker=1 -a emmabot123456789
+            ####heroku run -a emmabot123456789 python main.py
+            ####heroku ps:scale worker=1 -a emmabot123456789
