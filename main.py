@@ -151,9 +151,9 @@ class redditurl:
         url = self.urlset.pop()
         return url
 
-emma = redditurl('EmmaWatson',postLimit=10)
-gentleman = redditurl('gentlemanboners',postLimit=10)
-gonewild = redditurl('gonewild',postLimit=10)
+emma = redditurl('EmmaWatson')
+gentleman = redditurl('gentlemanboners')
+gonewild = redditurl('gonewild')
 
 ##############################Other main functions###########################
 def assign_workspace():
