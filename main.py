@@ -16,11 +16,11 @@ channels = {}
 # Constants
 READ_DELAY = 2  # Delay between reading from RTM
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"  # No idea why this works, but it does
-POST_LIMIT = 500  # Maximum posts scraped from reddit, has to be smaller than 1000
+
 
 ############################################ MESSAGING ####################################################
 commands = {'Wat eten we?', 'Wij hebben honger'}
-responses = {"help": "TODO",
+responses = {"help": "//TODO",
              "please": "Fine, here is a cute gif: https://giphy.com/gifs/emma-watson-XwpE5Bv0xcG5O",
              "Hello": "Hi, cutie! https://giphy.com/gifs/emma-watson-nMKyRK3dIFZa8",
              "Hello there": "General Kenobi!",
@@ -65,7 +65,7 @@ def handle_message(event):
             send_message(channel, "Excuse me?")
 
         elif command.startswith("mokke"):
-            mokke = get_url(gentleman_url_set)
+            mokke = gentleman.get_url()
             send_message(channel, mokke)
 
         else:
@@ -73,7 +73,7 @@ def handle_message(event):
 
     elif 'emma' in message or 'Emma' in message:
         # print("emma detected")
-        url = get_url(emma_url_set)
+        url = emma.get_url()
         send_message(channel, url)
 
 
@@ -95,28 +95,40 @@ reddit = praw.Reddit(client_id=REDDIT_BOT_USER,
                      password=REDDIT_PASSWORD)
 
 
-def submission_filter_imgur(all_submissions):
-    filtered = set()
-    for submission in all_submissions:
-        url = submission.url
-        if 'imgur' in url and 'gif' not in url:
-            filtered.add(url)
-    return filtered
+class redditurl:
+    def __init__(self,subreddit,type='img',postLimit=500):
+        self.subredditName = subreddit
+        self.subreddit = reddit.subreddit(self.subredditName)
+        self.limit = postLimit
 
-def get_url(url_set):
-    url = url_set.pop()
-    return url
+        all_submissions = self.get_top_submissions()
+        if type == 'img':
+            self.urlset = self.submission_filter_imgur(all_submissions)
+        elif type == 'gif':
+            pass
 
+    def get_top_submissions(self):
+        return self.subreddit.top(limit=self.limit)
 
-emma_subreddit = reddit.subreddit('EmmaWatson')
-top_emma_posts = emma_subreddit.top(limit=POST_LIMIT)
-emma_url_set = submission_filter_imgur(top_emma_posts)
+    def submission_filter_imgur(self,all_submissions,type='img'):
+        filtered = set()
+        for submission in all_submissions:
+            url = submission.url
+            if type =='img' and 'imgur' in url and 'gif' not in url:
+                filtered.add(url)
+            elif type =='gif' and 'gif' in url:
+                filtered.add(url)
+        return filtered
+        # if type == 'img':
+        #     return set(filter(lambda submission: 'imgur' in submission.url and 'gif' not in submission.url, all_submissions))
 
-gentleman_subreddit = reddit.subreddit('gentlemanboners')
-top_gentleman_posts = gentleman_subreddit.top(limit=POST_LIMIT)
-gentleman_url_set = submission_filter_imgur(top_gentleman_posts)
+    def get_url(self):
+        url = self.urlset.pop()
+        return url
 
-
+emma = redditurl('EmmaWatson')
+gentleman = redditurl('gentlemanboners')
+gonewild = redditurl('gonewild')
 
 ##############################Other main functions###########################
 def assign_workspace():
@@ -144,7 +156,7 @@ def get_id(argument):
 
 
 def bonjour():
-    url = get_url(gentleman_url_set)
+    url = gentleman.get_url()
     send_message(get_id('random'), url)
     time.sleep(1)
     send_message(get_id('random'), "Bonjour!")
