@@ -34,12 +34,15 @@ class message:
     def __init__(self,channel=None, content=None):
         self.set_content(content)
         self.set_channel(channel)
+        self.is_nsfw = False
 
     def send(self):
         if self.content != None and self.channel_id != None:
-             self.handshake = slack_client.api_call("chat.postMessage", channel=self.channel_id,text=self.content)
-             self.is_sent = self.handshake.get("ok")
-             self.timestamp = self.handshake.get("ts")
+            if self.is_nsfw == True:
+                self.set_channel('nsfw')
+            self.handshake = slack_client.api_call("chat.postMessage", channel=self.channel_id,text=self.content)
+            self.is_sent = self.handshake.get("ok")
+            self.timestamp = self.handshake.get("ts")
         else:
              print('Message not sent, no content or id specified')
 
@@ -51,7 +54,8 @@ class message:
             self.channel_id = id
         else:
             self.channel_id = channel
-
+    def set_nsfw(self):
+        self.is_nsfw = True
     def clear(self):
         self.content, self.channel_id = None, None
 
@@ -101,8 +105,15 @@ def handle_message_event(event):
 
         elif command.startswith("mokke"):
             reply.set_content(gentleman.get_url())
+        elif command.startswith("ros") or command.startswith("redhead"):
+            reply.set_content(ros.get_url())
+        elif command.startswith("go wild gif"):
+            reply.set_content(gonewildgif.get_url())
+            reply.set_nsfw()
+            destruct = True
         elif command.startswith("go wild") or command.startswith("let's go on safari"):
             reply.set_content(gonewild.get_url())
+            reply.set_nsfw()
             destruct = True
 
         else:
@@ -145,7 +156,7 @@ class redditurl:
         if type == 'img':
             self.urlset = self.submission_filter_imgur(all_submissions)
         elif type == 'gif':
-            pass
+            self.urlset = self.submission_filter_imgur(all_submissions,type)
 
     def get_top_submissions(self):
         return self.subreddit.top(limit=self.limit)
@@ -168,8 +179,9 @@ class redditurl:
 
 emma = redditurl('EmmaWatson')
 gentleman = redditurl('gentlemanboners')
-gonewild = redditurl('gonewild')
-
+gonewild = redditurl('gonewild', postLimit=100)
+gonewildgif = redditurl('gifsgonewild','gif',100)
+ros = redditurl('SFWRedHeads',postLimit=100)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
