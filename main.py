@@ -39,7 +39,7 @@ class message:
     def send(self):
         if self.content != None and self.channel_id != None:
             if self.is_nsfw == True:
-                self.set_channel('nsfw')
+                self.set_channel('klachten_p_en_o')
             self.handshake = slack_client.api_call("chat.postMessage", channel=self.channel_id,text=self.content)
             self.is_sent = self.handshake.get("ok")
             self.timestamp = self.handshake.get("ts")
@@ -107,6 +107,8 @@ def handle_message_event(event):
             reply.set_content(gentleman.get_url())
         elif command.startswith("ros") or command.startswith("redhead"):
             reply.set_content(ros.get_url())
+        elif command.startswith("cat") or command.startswith("kitty"):
+            reply.set_content(cats.get_url())
         elif command.startswith("go wild gif"):
             reply.set_content(gonewildgif.get_url())
             reply.set_nsfw()
@@ -182,6 +184,7 @@ gentleman = redditurl('gentlemanboners')
 gonewild = redditurl('gonewild', postLimit=100)
 gonewildgif = redditurl('gifsgonewild','gif',100)
 ros = redditurl('SFWRedHeads',postLimit=100)
+cats = redditurl('cats',postLimit=100)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
