@@ -37,7 +37,9 @@ class message:
 
     def send(self):
         if self.content != None and self.channel_id != None:
-             slack_client.rtm_send_message(self.channel_id,self.content)
+             self.handshake = slack_client.api_call("chat.postMessage", channel=self.channel_id,text=self.content)
+             self.is_sent = self.handshake.get("ok")
+             self.timestamp = self.handshake.get("ts")
         else:
              print('Message not sent, no content or id specified')
 
@@ -53,7 +55,19 @@ class message:
     def clear(self):
         self.content, self.channel_id = None, None
 
+    def self_destruct(self,timer=300):
+        time_sent = dt.datetime.now()
+        delete_time = time_sent + dt.timedelta(0,timer)
+        to_be_deleted[delete_time] = [self.channel_id,self.timestamp]
+
+    def remove(self,channel=None,ts= None):
+        if channel == None and ts == None:
+            return slack_client.api_call("chat.delete", channel=self.channel_id, ts=self.timestamp)
+        else:
+            slack_client.api_call("chat.delete", channel=channel, ts=ts)
+
 ############# Mention handling ##############
+to_be_deleted = {}
 def parse_direct_mention(message):
     """
         Finds a direct mention (a mention that is at the beginning) in message text
@@ -69,6 +83,7 @@ def handle_message_event(event):
     parse = parse_direct_mention(content)
     direct_bot = (parse[0] == bot_id)
     reply = message(channel)
+    destruct = False
 
     if direct_bot == True:
         command = parse[1]
@@ -88,6 +103,7 @@ def handle_message_event(event):
             reply.set_content(gentleman.get_url())
         elif command.startswith("go wild") or command.startswith("let's go on safari"):
             reply.set_content(gonewild.get_url())
+            destruct = True
 
         else:
             reply.set_content("I didn't quite catch that, try 'help'")
@@ -96,11 +112,10 @@ def handle_message_event(event):
         #print("emma detected")
         reply.set_content(emma.get_url())
 
-
     if reply.content!= None:
         reply.send()
-
-
+        if destruct == True:
+            reply.self_destruct()
 
 ####################################REDDIT SCRAPER ########################################
 
@@ -182,10 +197,19 @@ def get_id(argument):
 
 def bonjour():
     url = gentleman.get_url()
-    message('testchannel', url).send()
+    message('random', url).send()
     time.sleep(1)
-    message('testchannel', "Bonjour!").send()
+    message('random', "Bonjour!").send()
 
+def check_selfdestruct():
+    copy = to_be_deleted.copy()
+    for elem in copy.keys():
+        if elem < dt.datetime.now():
+            message_to_delete = to_be_deleted[elem]
+            channel = message_to_delete[0]
+            timestamp = message_to_delete[1]
+            message().remove(channel,timestamp)
+            del to_be_deleted[elem]
 
 ########################## MAIN LOOP ###################################
 
@@ -198,6 +222,7 @@ if __name__ == "__main__":
 
         message('testchannel', "Version 2.0 is connected and running!").send()
         schedule.every().day.at("08:00").do(bonjour)
+        schedule.every(10).seconds.do(check_selfdestruct)
 
         while True:
             # print("I'm working")
