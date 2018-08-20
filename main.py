@@ -28,7 +28,7 @@ help_string = "*A short user's guide to Emma:* \n" \
        "> 'Wat eten we?' : I make the difficult choices. \n" \
        "> 'mokke' : Only the finest eye candy of the classiest nature can be found here, as beauty is superior to seduction. \n" \
        "> 'ros' or 'redhead' : An SFW image for people who appreciate the beauty of those with red hair. \n" \
-       "> 'sexy' : A sexy, well-composed, and artistic image that is as beautiful as it is erotic. \n " \
+       "> 'sexy' : A sexy, well-composed, and artistic image that is as beautiful as it is erotic. \n" \
        "> 'go wild' or 'let's go on safari' : For those who like to go on an adventure. (All posts redirected to klachten_p_en_o) \n" \
        "> 'go wild gif': For those who are REALLY in for a ride. Maybe you should search for this on _other_ sites \n" \
        "> 'cat' or 'kitty' : If you need some eyebleach material :cat2:  (All posts redirected to nsfw)  "
@@ -188,7 +188,7 @@ class redditurl:
             url = submission.url
             if type =='img' and 'imgur' in url and 'gif' not in url:
                 filtered.add(url)
-            elif type =='gif' and 'gif' in url:
+            elif type =='gif' and ('gif' in url or 'gfy' in url):
                 filtered.add(url)
         return filtered
         # if type == 'img':
@@ -202,9 +202,9 @@ emma = redditurl('EmmaWatson')
 gentleman = redditurl('gentlemanboners')
 gonewild = redditurl('gonewild', postLimit=100)
 gonewildgif = redditurl('gifsgonewild','gif',100)
-ros = redditurl('SFWRedHeads',postLimit=100)
+ros = redditurl('SFWRedHeads',postLimit=200)
 cats = redditurl('cats',postLimit=100)
-sexy = redditurl('SexyButNotPorn',postLimit=100)
+sexy = redditurl('SexyButNotPorn',postLimit=200)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
