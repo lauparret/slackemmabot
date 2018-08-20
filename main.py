@@ -6,6 +6,7 @@ import praw
 import pandas as pd
 import datetime as dt
 import schedule
+import random
 
 # Slackbot INIT
 slack_client = SlackClient(os.environ.get("SLACK_BOT_TOKEN"))
@@ -19,10 +20,24 @@ MENTION_REGEX = "^<@(|[WU].+?)>(.*)"  # No idea why this works, but it does
 
 
 ############################################ MESSAGING ####################################################
+help_string = "*A short user's guide to Emma:* \n" \
+       "> 'please' : My weakness is polite guys... \n" \
+       "> 'Hello' : Or you can just say 'Hi' if you want \n" \
+       "> 'Make me a sandwich' : You'll have to ask that very kindly \n" \
+       "> 'Emma' : No need to direct mention me, I listen to my name anywhere, anytime... \n" \
+       "> 'Wat eten we?' : I make the difficult choices. \n" \
+       "> 'mokke' : Only the finest eye candy of the classiest nature can be found here, as beauty is superior to seduction. \n" \
+       "> 'ros' or 'redhead' : An SFW image for people who appreciate the beauty of those with red hair. \n" \
+       "> 'sexy' : A sexy, well-composed, and artistic image that is as beautiful as it is erotic. " \
+       "> 'go wild' or 'let's go on safari' : For those who like to go on an adventure. (All posts redirected to klachten_p_en_o) \n" \
+       "> 'go wild gif': For those who are REALLY in for a ride. Maybe you should search for this on _other_ sites \n" \
+       "> 'cat' or 'kitty' : If you need some eyebleach material :cat2:  (All posts redirected to nsfw)  "
+
 commands = {'Wat eten we?', 'Wij hebben honger'}
-responses = {"help": "I listen to: 'please', 'Hello there', 'mokke', 'go wild' and some other stuff",
+responses = {"help": help_string,
              "please": "Fine, here is a cute gif: https://giphy.com/gifs/emma-watson-XwpE5Bv0xcG5O",
              "Hello": "Hi, cutie! https://giphy.com/gifs/emma-watson-nMKyRK3dIFZa8",
+             "Hi": "Hi, cutie! https://giphy.com/gifs/emma-watson-nMKyRK3dIFZa8",
              "Hello there": "General Kenobi!",
              "make me a sandwich": "What? Make it yourself.",
              "sudo make me a sandwich": "Ok. http://www.chingssecret.com/assets/uploads/images/chings-secret-schezwan-chutney-sandwitch%2003.jpg"
@@ -102,14 +117,17 @@ def handle_message_event(event):
             message(channel,
                  "https://78.media.tumblr.com/a671be346722c876dd44925912bc51d6/tumblr_inline_osgqtm7Yxx1rifr4k_250.gif").send()
             reply.set_content("Excuse me?")
-
+        elif command.startswith("Wat eten we?"):
+            choice = random.sample(food,1)
+            reply.set_content(choice[0])
         elif command.startswith("mokke"):
             reply.set_content(gentleman.get_url())
         elif command.startswith("ros") or command.startswith("redhead"):
             reply.set_content(ros.get_url())
         elif command.startswith("cat") or command.startswith("kitty"):
             reply.set_content(cats.get_url())
-            reply.set_channel('nsfw')
+        elif command.startswith("sexy"):
+            reply.set_content(sexy.get_url())
         elif command.startswith("go wild gif"):
             reply.set_content(gonewildgif.get_url())
             reply.set_nsfw()
@@ -186,6 +204,7 @@ gonewild = redditurl('gonewild', postLimit=100)
 gonewildgif = redditurl('gifsgonewild','gif',100)
 ros = redditurl('SFWRedHeads',postLimit=100)
 cats = redditurl('cats',postLimit=100)
+sexy = redditurl('SexyButNotPorn',postLimit=100)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
