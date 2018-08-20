@@ -109,6 +109,7 @@ def handle_message_event(event):
             reply.set_content(ros.get_url())
         elif command.startswith("cat") or command.startswith("kitty"):
             reply.set_content(cats.get_url())
+            reply.set_channel('nsfw')
         elif command.startswith("go wild gif"):
             reply.set_content(gonewildgif.get_url())
             reply.set_nsfw()
