@@ -31,7 +31,8 @@ help_string = "*A short user's guide to Emma:* \n" \
        "> 'sexy' : A sexy, well-composed, and artistic image that is as beautiful as it is erotic. \n" \
        "> 'go wild' or 'let's go on safari' : For those who like to go on an adventure. (All posts redirected to klachten_p_en_o) \n" \
        "> 'go wild gif': For those who are REALLY in for a ride. Maybe you should search for this on _other_ sites \n" \
-       "> 'cat' or 'kitty' : If you need some eyebleach material :cat2:  (All posts redirected to nsfw)  "
+       "> 'cat' or 'kitty' : If you need some eyebleach material :cat2:  (All posts redirected to nsfw)  \n" \
+       "> '$ sudo poweroff emma' : Stop command; only use case of emergency..." \
 
 commands = {'Wat eten we?', 'Wij hebben honger'}
 responses = {"help": help_string,
@@ -106,10 +107,10 @@ def handle_message_event(event):
 
     if direct_bot == True:
         command = parse[1]
-        if command.startswith("stop"):
+        if command.startswith("$ sudo poweroff emma"):
             reply.set_content('Ok, bye!')
             reply.send()
-            #exit()
+            exit()
         elif command in responses:
             reply.set_content(responses[command])
 
