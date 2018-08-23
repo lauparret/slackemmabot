@@ -109,7 +109,7 @@ def handle_message_event(event):
         if command.startswith("stop"):
             reply.set_content('Ok, bye!')
             reply.send()
-            exit()
+            #exit()
         elif command in responses:
             reply.set_content(responses[command])
 
