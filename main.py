@@ -7,7 +7,7 @@ import pandas as pd
 import datetime as dt
 import schedule
 import random
-
+#import requests
 # Slackbot INIT
 slack_client = SlackClient(os.environ.get("SLACK_BOT_TOKEN"))
 bot_id = None
@@ -32,7 +32,7 @@ help_string = "*A short user's guide to Emma:* \n" \
        "> 'go wild' or 'let's go on safari' : For those who like to go on an adventure. (All posts redirected to klachten_p_en_o) \n" \
        "> 'go wild gif': For those who are REALLY in for a ride. Maybe you should search for this on _other_ sites \n" \
        "> 'cat' or 'kitty' : If you need some eyebleach material :cat2:  (All posts redirected to nsfw)  \n" \
-       "> '$ sudo poweroff emma' : Stop command; only use case of emergency..." 
+       "> '$ sudo poweroff emma' : Stop command; only use case of emergency..."
 
 commands = {'Wat eten we?', 'Wij hebben honger'}
 responses = {"help": help_string,
@@ -100,6 +100,7 @@ def parse_direct_mention(message):
 def handle_message_event(event):
     content = event.get('text')
     channel = event.get('channel')
+    user = event.get('user')
     parse = parse_direct_mention(content)
     direct_bot = (parse[0] == bot_id)
     reply = message(channel)
@@ -123,6 +124,8 @@ def handle_message_event(event):
             reply.set_content(choice[0])
         elif command.startswith("mokke"):
             reply.set_content(gentleman.get_url())
+        elif command.startswith("make coffee"):
+            reply.set_content(make_coffee(user))
         elif command.startswith("ros") or command.startswith("redhead"):
             reply.set_content(ros.get_url())
         elif command.startswith("cat") or command.startswith("kitty"):
@@ -246,6 +249,13 @@ def check_selfdestruct():
             timestamp = message_to_delete[1]
             message().remove(channel,timestamp)
             del to_be_deleted[elem]
+
+def make_coffee(userid):
+    if userid == 'U5A7GT5EZ':
+        #requests.post("http://coffeemachine/Coffee")
+        return "Making coffee!"
+    else:
+        return "Sorry, you have no permission to do that."
 
 ########################## MAIN LOOP ###################################
 
