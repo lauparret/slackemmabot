@@ -267,7 +267,7 @@ if __name__ == "__main__":
         assign_workspace()
 
         message('testchannel', "Version 2.0 is connected and running!").send()
-        schedule.every().day.at("08:00").do(bonjour)
+        schedule.every().day.at("09:00").do(bonjour)
         schedule.every(10).seconds.do(check_selfdestruct)
 
         while True:
