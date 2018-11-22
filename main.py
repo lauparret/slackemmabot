@@ -275,13 +275,26 @@ if __name__ == "__main__":
             # input("Press key to continue")
             schedule.run_pending()
             event = slack_client.rtm_read()
-            # print(event)
+            print(event)
             if len(event) != 0:
                 for elem in event:
                     event_type = elem.get('type')
                     if event_type == 'message' and not event_type == None and \
                             not "subtype" in elem and not "message" in elem and "text" in elem:
                         handle_message_event(elem)
+
+                    elif elem.get('username') == 'IFTTT':
+                        sent_command = elem.get('attachments')[0]
+                        sent_content = sent_command.get('pretext')
+                        print(sent_content)
+                        if sent_content == 'Emma':
+                            dummy_text = 'Emma'
+                        else:
+                            dummy_text = '<@UAZS9KMEU> ' + sent_content
+                        print(dummy_text)
+                        dummy_message = {'type': 'message', 'user': 'U5A7GT5EZ',
+                                          'text': dummy_text, 'team': 'T5A751T1B', 'channel': 'C5A2772EP'}
+                        handle_message_event(dummy_message)
 
             time.sleep(READ_DELAY)
 
