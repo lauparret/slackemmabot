@@ -132,6 +132,7 @@ def handle_message_event(event):
             reply.set_content(cats.get_url())
         elif command.startswith("sexy"):
             reply.set_content(sexy.get_url())
+            reply.set_nsfw()
         elif command.startswith("go wild gif"):
             reply.set_content(gonewildgif.get_url())
             reply.set_nsfw()
