@@ -241,7 +241,7 @@ def bonjour():
     url = gentleman.get_url()
     message('random', url).send()
     time.sleep(1)
-    message('random', "Bonjour!").send()
+    message('klachten_p_en_o', "Bonjour!").send()
 
 def check_selfdestruct():
     copy = to_be_deleted.copy()
