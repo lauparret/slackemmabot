@@ -124,10 +124,12 @@ def handle_message_event(event):
             reply.set_content(choice[0])
         elif command.startswith("mokke"):
             reply.set_content(gentleman.get_url())
+            reply.set_nsfw()
         elif command.startswith("make coffee"):
             reply.set_content(make_coffee(user))
         elif command.startswith("ros") or command.startswith("redhead"):
             reply.set_content(ros.get_url())
+            reply.set_nsfw()
         elif command.startswith("cat") or command.startswith("kitty"):
             reply.set_content(cats.get_url())
         elif command.startswith("sexy"):
