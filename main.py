@@ -239,7 +239,7 @@ def get_id(argument):
 
 def bonjour():
     url = gentleman.get_url()
-    message('random', url).send()
+    message('klachten_p_en_o', url).send()
     time.sleep(1)
     message('klachten_p_en_o', "Bonjour!").send()
 
