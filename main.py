@@ -136,9 +136,10 @@ def handle_message_event(event):
             reply.set_content(sexy.get_url())
             reply.set_nsfw()
         elif command.startswith("go wild gif"):
-            reply.set_content(gonewildgif.get_url())
+            message(channel,"This feature has been discontinued, please contact the high king to file a complaint. A cute cat will be sent as compensation").send()
+            reply.set_content(cats.get_url())
             reply.set_nsfw()
-            destruct = True
+            destruct = False
         elif command.startswith("go wild") or command.startswith("let's go on safari"):
             reply.set_content(gonewild.get_url())
             reply.set_nsfw()
@@ -179,7 +180,7 @@ class redditurl:
         self.subredditName = subreddit
         self.subreddit = reddit.subreddit(self.subredditName)
         self.limit = postLimit
-
+        
         all_submissions = self.get_top_submissions()
         if type == 'img':
             self.urlset = self.submission_filter_imgur(all_submissions)
@@ -187,8 +188,11 @@ class redditurl:
             self.urlset = self.submission_filter_imgur(all_submissions,type)
 
     def get_top_submissions(self):
-        return self.subreddit.top(limit=self.limit)
+        return self.subreddit.top('week',limit=self.limit)
 
+    def get_hot_submissions(self):
+        return self.subreddit.hot(limit=self.limit)
+       
     def submission_filter_imgur(self,all_submissions,type='img'):
         filtered = set()
         for submission in all_submissions:
@@ -208,10 +212,10 @@ class redditurl:
 emma = redditurl('EmmaWatson')
 gentleman = redditurl('gentlemanboners')
 gonewild = redditurl('gonewild', postLimit=100)
-gonewildgif = redditurl('gifsgonewild','gif',100)
+#gonewildgif = redditurl('gifsgonewild','gif',100)
 ros = redditurl('SFWRedHeads',postLimit=200)
 cats = redditurl('cats',postLimit=100)
-sexy = redditurl('SexyButNotPorn',postLimit=200)
+sexy = redditurl('SexyButNotPorn',postLimit=300)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
