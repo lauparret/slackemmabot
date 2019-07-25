@@ -206,7 +206,8 @@ class redditurl:
         #     return set(filter(lambda submission: 'imgur' in submission.url and 'gif' not in submission.url, all_submissions))
 
     def get_url(self):
-        url = self.urlset.pop()
+        url = random.sample(self.urlset)
+        #url = self.urlset.pop()
         return url
 
 emma = redditurl('EmmaWatson')
