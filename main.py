@@ -141,10 +141,10 @@ def handle_message_event(event):
             reply.set_nsfw()
             destruct = False
         elif command.startswith("lucy"):
-            message(channel,"I am under no circumstances accountable for whatever naughty image will be sent; it is proprietary content from Mrs. Lucy_Bot").send()
+            message(channel,"Groetjes van Lucy_Bot").send()
             reply.set_content(lucy.get_url())
             reply.set_nsfw()
-            destruct = True
+            destruct = False
         elif command.startswith("go wild") or command.startswith("let's go on safari"):
             reply.set_content(gonewild.get_url())
             reply.set_nsfw()
