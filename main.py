@@ -219,10 +219,10 @@ emma = redditurl('EmmaWatson')
 gentleman = redditurl('gentlemanboners')
 gonewild = redditurl('gonewild', postLimit=100)
 #gonewildgif = redditurl('gifsgonewild','gif',100)
-ros = redditurl('SFWRedHeads',postLimit=200)
+ros = redditurl('SFWRedHeads',postLimit=400)
 cats = redditurl('cats',postLimit=100)
-sexy = redditurl('SexyButNotPorn',postLimit=300)
-lucy = redditurl('lucypinder',postLimit=100)
+sexy = redditurl('SexyButNotPorn',postLimit=500)
+lucy = redditurl('lucypinder',postLimit=500)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
