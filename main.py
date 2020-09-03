@@ -213,7 +213,7 @@ class redditurl:
     def get_url(self):
         url = random.sample(self.urlset,1)
         #url = self.urlset.pop()
-        return url
+        return url[0]
 
 emma = redditurl('EmmaWatson')
 gentleman = redditurl('gentlemanboners')
