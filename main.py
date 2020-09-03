@@ -140,6 +140,11 @@ def handle_message_event(event):
             reply.set_content(cats.get_url())
             reply.set_nsfw()
             destruct = False
+        elif command.startswith("lucy"):
+            message(channel,"I am under no circumstances accountable for whatever naughty image will be sent").send()
+            reply.set_content(lucy.get_url())
+            reply.set_nsfw()
+            destruct = True
         elif command.startswith("go wild") or command.startswith("let's go on safari"):
             reply.set_content(gonewild.get_url())
             reply.set_nsfw()
@@ -181,7 +186,7 @@ class redditurl:
         self.subreddit = reddit.subreddit(self.subredditName)
         self.limit = postLimit
         
-        all_submissions = self.get_top_submissions()
+        all_submissions = self.get_hot_submissions()
         if type == 'img':
             self.urlset = self.submission_filter_imgur(all_submissions)
         elif type == 'gif':
@@ -217,6 +222,7 @@ gonewild = redditurl('gonewild', postLimit=100)
 ros = redditurl('SFWRedHeads',postLimit=200)
 cats = redditurl('cats',postLimit=100)
 sexy = redditurl('SexyButNotPorn',postLimit=300)
+lucy = redditurl('lucypinder',postLimit=100)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
