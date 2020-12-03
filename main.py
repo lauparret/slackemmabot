@@ -98,7 +98,7 @@ def parse_direct_mention(message):
 
 
 def handle_message_event(event):
-    content = event.get('text')
+    content = event.get('text').lower()
     channel = event.get('channel')
     user = event.get('user')
     parse = parse_direct_mention(content)
@@ -143,6 +143,10 @@ def handle_message_event(event):
         elif command.startswith("lucy"):
             message(channel,"Groetjes van Lucy_Bot").send()
             reply.set_content(lucy.get_url())
+            reply.set_nsfw()
+            destruct = False
+        elif command.startswith("alex") or command.startswith("medusa"):
+            reply.set_content(alex.get_url())
             reply.set_nsfw()
             destruct = False
         elif command.startswith("go wild") or command.startswith("let's go on safari"):
@@ -222,7 +226,8 @@ gonewild = redditurl('gonewild', postLimit=100)
 ros = redditurl('SFWRedHeads',postLimit=400)
 cats = redditurl('cats',postLimit=100)
 sexy = redditurl('SexyButNotPorn',postLimit=500)
-lucy = redditurl('lucypinder',postLimit=500)
+lucy = redditurl('lucypinder',postLimit=100)
+alex = redditurl('alexandradaddario',postLimit=500)
 ##############################Other main functions###########################
 def assign_workspace():
     global bot_id, users, channels
