@@ -98,7 +98,7 @@ def parse_direct_mention(message):
 
 
 def handle_message_event(event):
-    content = event.get('text').lower()
+    content = event.get('text')
     channel = event.get('channel')
     user = event.get('user')
     parse = parse_direct_mention(content)
@@ -108,6 +108,7 @@ def handle_message_event(event):
 
     if direct_bot == True:
         command = parse[1]
+        command = command.lower()
         if command.startswith("$ sudo poweroff emma"):
             reply.set_content('Ok, bye!')
             reply.send()
