@@ -3,7 +3,7 @@ import time
 import re
 from slackclient import SlackClient
 import praw
-import pandas as pd
+# import pandas as pd
 import datetime as dt
 import schedule
 import random
